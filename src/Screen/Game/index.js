@@ -33,7 +33,7 @@ class GameScreen extends React.Component {
         },
         score: {
           ...state.score,
-          result: false
+          [random]: false
         }
       }));
     } else if (!wrong && result) {
@@ -45,7 +45,7 @@ class GameScreen extends React.Component {
         },
         score: {
           ...state.score,
-          result: true
+          [random]: true
         }
       }));
     }
@@ -63,7 +63,7 @@ class GameScreen extends React.Component {
         },
         score: {
           ...state.score,
-          result: true
+          [random]: true
         }
       }));
     } else if (wrong && result) {
@@ -75,12 +75,25 @@ class GameScreen extends React.Component {
         },
         score: {
           ...state.score,
-          result: false
+          [random]: false
         }
       }));
     }
   };
-
+  onClose = () => {
+    const scoreArr = Object.values(this.state.score);
+    let right = 0;
+    let wrong = 0;
+    const score = scoreArr.map(item => {
+      if (item) {
+        right = right + 1;
+      } else {
+        wrong = wrong + 1;
+      }
+    });
+    alert(`Seu placar foi de ${right} Certas e ${wrong} Erradas`);
+    this.setState({ gameStart: true });
+  };
   render() {
     // const expression = challengeGenerator(1);
     const result = math.eval(this.state.expression.exp);
@@ -107,8 +120,8 @@ class GameScreen extends React.Component {
               marginBottom: 50
             }}
           />
-          <Button onPress={() => this.onWrong(wrong, true)} color="blue">
-            <Icon name="superpower" color="white" size={30} />
+          <Button onPress={this.onClose} color="blue">
+            Close Game!!
           </Button>
         </View>
       );
